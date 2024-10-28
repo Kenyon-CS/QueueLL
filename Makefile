@@ -7,7 +7,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -pedantic
 
 # Target executable name
-TARGET = queue_array
+TARGET = queue_LL
 
 # Source files
 SRCS = main.cpp
