@@ -1,67 +1,90 @@
 #include <iostream>
-
 using namespace std;
-struct node {
-  int data;
-  struct node * next;
+
+class Queue {
+private:
+    // Node structure to represent each element in the queue
+    struct Node {
+        int data;
+        Node* next;
+        Node(int val) : data(val), next(nullptr) {}  // Constructor to initialize node
+    };
+
+    Node* front;  // Pointer to the front of the queue
+    Node* rear;   // Pointer to the rear of the queue
+
+public:
+    // Constructor to initialize an empty queue
+    Queue() : front(nullptr), rear(nullptr) {}
+
+    // Destructor to clean up memory
+    ~Queue() {
+        while (front) {
+            Node* temp = front;
+            front = front->next;
+            delete temp;
+        }
+    }
+
+    // Enqueue method to insert an element at the rear of the queue
+    void enqueue(int val) {
+        Node* temp = new Node(val);  // Create a new node with the value
+        if (rear == nullptr) {       // Queue is empty
+            front = rear = temp;
+        } else {
+            rear->next = temp;
+            rear = temp;
+        }
+    }
+
+    // Dequeue method to remove an element from the front of the queue
+    void dequeue() {
+        if (front == nullptr) {  // Queue is empty
+            cout << "Queue is empty!" << endl;
+            return;
+        }
+
+        Node* temp = front;
+        cout << "Element deleted from queue: " << front->data << endl;
+        front = front->next;
+
+        if (front == nullptr) {  // If queue becomes empty after dequeue
+            rear = nullptr;
+        }
+        
+        delete temp;
+    }
+
+    // Display method to show all elements in the queue
+    void display() const {
+        if (front == nullptr) {  // Queue is empty
+            cout << "Queue is empty" << endl;
+            return;
+        }
+
+        Node* temp = front;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
 };
-struct node * front = NULL;
-struct node * rear = NULL;
-struct node * temp;
-void Insert(int val) {
-  if (rear == NULL) {
-    rear = new node;
-    rear -> next = NULL;
-    rear -> data = val;
-    front = rear;
-  } else {
-    temp = new node;
-    rear -> next = temp;
-    temp -> data = val;
-    temp -> next = NULL;
-    rear = temp;
-  }
-}
-void Delete() {
-  temp = front;
-  if (front == NULL) {
-    cout << "Queue is empty!!" << endl;
-  } else if (temp -> next != NULL) {
-    temp = temp -> next;
-    cout << "Element deleted from queue is : " << front -> data << endl;
-    free(front);
-    front = temp;
-  } else {
-    cout << "Element deleted from queue is : " << front -> data << endl;
-    free(front);
-    front = NULL;
-    rear = NULL;
-  }
-}
-void Display() {
-  temp = front;
-  if ((front == NULL) && (rear == NULL)) {
-    cout << "Queue is empty" << endl;
-    return;
-  }
-  while (temp != NULL) {
-    cout << temp -> data << " ";
-    temp = temp -> next;
-  }
-  cout << endl;
-}
+
 int main() {
+    Queue q;
 
-  cout << "Queue Created:" << endl;
-  Insert(10);
-  Insert(20);
-  Insert(30);
-  Insert(40);
-  Insert(50);
-  Display();
-  Delete();
-  cout << "Queue after one deletion: " << endl;
-  Display();
+    cout << "Queue Created:" << endl;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50);
+    q.display();
 
-  return 0;
+    q.dequeue();
+    cout << "Queue after one deletion:" << endl;
+    q.display();
+
+    return 0;
 }
